@@ -2,7 +2,11 @@ import streamlit as st
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 from langchain_core.prompts import ChatPromptTemplate
-from langchain.chains import create_retrieval_chain
+
+# ✅ 最终修正版：使用精确的物理路径，不要用简写
+# 1. 检索链的精确位置：
+from langchain.chains.retrieval import create_retrieval_chain
+# 2. 文档合并链的精确位置：
 from langchain.chains.combine_documents import create_stuff_documents_chain
 
 
