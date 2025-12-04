@@ -1,13 +1,3 @@
-import os
-import subprocess
-import sys
-
-# 暴力补丁：如果环境缺包，直接在运行代码时强制安装
-try:
-    import bs4
-except ImportError:
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "beautifulsoup4"])
-
 import streamlit as st
 from rag_pipeline import build_knowledge_base
 from chat import run_chat
