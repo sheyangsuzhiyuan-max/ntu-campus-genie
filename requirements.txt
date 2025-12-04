@@ -10,3 +10,7 @@ pypdf
 tiktoken
 watchdog
 beautifulsoup4
+langchain
+langchain-community
+langchain-core
+langchain-openai
