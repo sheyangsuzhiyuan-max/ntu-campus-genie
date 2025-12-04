@@ -1,11 +1,10 @@
 streamlit
 openai
-# 强制锁定 0.3.x 系列，防止服务器乱装
-langchain>=0.3.0
-langchain-community>=0.3.0
-langchain-core>=0.3.0
-langchain-openai>=0.2.0
-langchain-text-splitters>=0.3.0
+langchain==0.3.7
+langchain-community==0.3.7
+langchain-core==0.3.15
+langchain-openai==0.2.5
+langchain-text-splitters==0.3.2
 sentence-transformers
 faiss-cpu
 pypdf
