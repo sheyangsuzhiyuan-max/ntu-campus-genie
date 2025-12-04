@@ -1,16 +1,14 @@
-# 核心全家桶
-langchain>=0.3.0
-langchain-community>=0.3.0
-langchain-core>=0.3.0
-langchain-openai>=0.2.0
-langchain-text-splitters>=0.3.0
+streamlit==1.38.0
+openai
+# 回退到极其稳定的 0.2 系列
+langchain==0.2.16
+langchain-community==0.2.16
+langchain-core==0.2.38
+langchain-openai==0.1.23
+langchain-text-splitters==0.2.4
 
-# 向量与模型支持
+# 向量数据库与模型（保持不变，但去掉版本限制以免冲突）
 sentence-transformers
 faiss-cpu
 pypdf
 tiktoken
-
-# 界面与工具
-streamlit
-watchdog
