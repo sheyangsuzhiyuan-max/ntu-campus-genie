@@ -10,5 +10,4 @@ faiss-cpu
 pypdf
 tiktoken
 beautifulsoup4
-bs4
-lxml
+# Force Reinstall Trigger 2025
