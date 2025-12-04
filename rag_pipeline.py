@@ -119,4 +119,4 @@ def build_knowledge_base(
     except Exception as e:
         progress_bar.empty()
         status_text.empty()
-        st.error(f"构建过程发生未知错误: {e}")
+        st.error(f"构建过程发生未知错误: {e}")# Update test
