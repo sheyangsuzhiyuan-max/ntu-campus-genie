@@ -3,10 +3,9 @@ from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 from langchain_core.prompts import ChatPromptTemplate
 
-# ✅ 改回标准写法 (环境修好后，这个才是对的)
-from langchain.chains import create_retrieval_chain
+# ✅ 修改：使用最底层的物理路径，绕过主包引用问题
+from langchain.chains.retrieval import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
-
 
 def run_chat(deepseek_api_key: str) -> None:
     """主聊天逻辑：根据是否有 vectorstore 决定走 RAG 还是普通对话。"""

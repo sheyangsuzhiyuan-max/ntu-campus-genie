@@ -1,13 +1,13 @@
 streamlit
 openai
-langchain
-langchain-community
-langchain-core
-langchain-openai
-langchain-text-splitters
+# 强制锁定 0.3.x 系列，防止服务器乱装
+langchain>=0.3.0
+langchain-community>=0.3.0
+langchain-core>=0.3.0
+langchain-openai>=0.2.0
+langchain-text-splitters>=0.3.0
 sentence-transformers
 faiss-cpu
 pypdf
 tiktoken
 beautifulsoup4
-# Force Reinstall Trigger 2025
