@@ -1,14 +1,14 @@
-streamlit==1.38.0
+streamlit
 openai
-# 回退到极其稳定的 0.2 系列
-langchain==0.2.16
-langchain-community==0.2.16
-langchain-core==0.2.38
-langchain-openai==0.1.23
-langchain-text-splitters==0.2.4
-
-# 向量数据库与模型（保持不变，但去掉版本限制以免冲突）
+langchain
+langchain-community
+langchain-core
+langchain-openai
+langchain-text-splitters
 sentence-transformers
 faiss-cpu
 pypdf
 tiktoken
+beautifulsoup4
+bs4
+lxml
