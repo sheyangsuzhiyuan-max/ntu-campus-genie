@@ -61,5 +61,43 @@ with st.sidebar:
         for stat in st.session_state["doc_stats"]:
             st.caption(f"- {stat['name']} ({stat['chars']} 字)")
 
+# --- 知识库统计 ---
+if "doc_stats" in st.session_state:
+    st.divider()
+    st.caption("📊 当前知识库包含：")
+    for stat in st.session_state["doc_stats"]:
+        st.caption(f"- {stat['type']} {stat['name']} ({stat['chars']} 字)")
+
+# --- 快速开始问题 ---
+st.divider()
+st.subheader("✨ 快速开始（示例问题）")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.caption("🏠 研究生宿舍相关")
+    if st.button("列出研究生宿舍类型和价格", key="qs_housing_1"):
+        st.session_state["prefill"] = (
+            "请用中文告诉我 NTU 研究生宿舍（Graduate Hall 1、Graduate Hall 2 和 North Hill）"
+            "的房型和每月价格。"
+        )
+    if st.button("宿舍申请时间和截止日期", key="qs_housing_2"):
+        st.session_state["prefill"] = (
+            "AY2025-2026 研究生宿舍的申请时间和截止日期是什么？"
+        )
+
+with col2:
+    st.caption("🪪 Student's Pass / 签证")
+    if st.button("STP 的 SOLAR 办理流程", key="qs_stp_1"):
+        st.session_state["prefill"] = (
+            "我已经拿到 NTU 的 offer，请告诉我如何通过 SOLAR 申请 Student's Pass（STP），"
+            "需要哪些步骤和费用？"
+        )
+    if st.button("办理 STP 需要哪些体检", key="qs_stp_2"):
+        st.session_state["prefill"] = (
+            "办理 Student's Pass 需要做什么体检？在 NTU 校医院可以完成吗？"
+        )
+
+
 # --- 3. 聊天主逻辑 ---
 run_chat(deepseek_api_key)
