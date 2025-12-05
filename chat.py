@@ -285,3 +285,68 @@ def run_chat(deepseek_api_key: str) -> None:
     except Exception as e:
         st.error(f"发生错误: {e}")
 
+
+def generate_housing_plan(preferences: dict, deepseek_api_key: str) -> str:
+    """
+    根据用户的偏好 + 当前向量知识库，生成宿舍推荐与申请计划。
+    preferences 示例：
+    {
+        "budget": "尽量省钱",
+        "privacy": "非常在意",
+        "stay_term": "整学年（2 学期）",
+    }
+    """
+    if "vectorstore" not in st.session_state:
+        return "当前还没有宿舍相关知识库，请先上传文档或输入 NTU 官网链接并点击构建知识库。"
+
+    if not deepseek_api_key:
+        return "DeepSeek API Key 未设置，请先在左侧设置。"
+
+    # 初始化 LLM
+    llm = ChatOpenAI(
+        model="deepseek-chat",
+        openai_api_key=deepseek_api_key,
+        base_url="https://api.deepseek.com/v1",
+    )
+
+    vectorstore = st.session_state["vectorstore"]
+    retriever = vectorstore.as_retriever(search_kwargs={"k": 6})
+
+    # 把偏好转成一段自然语言描述
+    pref_text = (
+        f"预算倾向：{preferences.get('budget')}\n"
+        f"隐私 / 独立卫生间：{preferences.get('privacy')}\n"
+        f"预计入住时长：{preferences.get('stay_term')}\n"
+    )
+
+    prompt_tmpl = ChatPromptTemplate.from_template(
+        """
+        你是一个熟悉 NTU 研究生宿舍的助手。
+        下面是一位同学的住宿偏好，请结合【背景信息】给出建议。
+
+        要求输出结构：
+        1. 用 2-3 句话总结 TA 的需求特点。
+        2. 推荐 1-2 个具体宿舍选择（比如 Graduate Hall 1 双人间 / North Hill 单人间），
+           解释为什么适合（结合价格、房型、是否独立卫浴等）。
+        3. 给出一个清晰的申请 checklist（用条目列出），包括：
+           - 何时在系统里提交申请
+           - 需要支付的费用（如果文档中有）
+           - 注意查看宿舍结果的时间节点
+        如果文档中没有提到某些细节，请明确写“文档中未提及”。
+
+        【学生的偏好】：
+        {preferences}
+
+        【背景信息】：
+        {context}
+        """
+    )
+
+    doc_chain = create_stuff_documents_chain(llm, prompt_tmpl)
+    rag_chain = create_retrieval_chain(retriever, doc_chain)
+
+    # 把“偏好”作为 input 送进 RAG
+    result = rag_chain.invoke({"input": "", "preferences": pref_text})
+    answer = result.get("answer") or "生成失败，请稍后重试。"
+
+    return answer

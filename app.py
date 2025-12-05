@@ -1,3 +1,6 @@
+import os
+import csv
+
 import streamlit as st
 from rag_pipeline import build_knowledge_base
 from chat import run_chat
@@ -68,36 +71,77 @@ if "doc_stats" in st.session_state:
     for stat in st.session_state["doc_stats"]:
         st.caption(f"- {stat['type']} {stat['name']} ({stat['chars']} 字)")
 
+
 # --- 快速开始问题 ---
 st.divider()
 st.subheader("✨ 快速开始（示例问题）")
+# ... 你已有的示例按钮代码 ...
 
-col1, col2 = st.columns(2)
+# --- 宿舍申请向导 ---
+st.divider()
+st.subheader("🏠 研究生宿舍申请向导")
 
-with col1:
-    st.caption("🏠 研究生宿舍相关")
-    if st.button("列出研究生宿舍类型和价格", key="qs_housing_1"):
-        st.session_state["prefill"] = (
-            "请用中文告诉我 NTU 研究生宿舍（Graduate Hall 1、Graduate Hall 2 和 North Hill）"
-            "的房型和每月价格。"
+if "vectorstore" not in st.session_state:
+    st.info("请先上传宿舍相关文档或输入 NTU 官网链接，并点击左侧的『点击构建知识库』。")
+else:
+    with st.expander("根据你的偏好生成宿舍推荐与申请计划", expanded=False):
+        budget = st.selectbox(
+            "你的预算倾向是？",
+            ["尽量省钱", "中等预算", "可以接受更贵但更舒适"],
+            index=0,
         )
-    if st.button("宿舍申请时间和截止日期", key="qs_housing_2"):
-        st.session_state["prefill"] = (
-            "AY2025-2026 研究生宿舍的申请时间和截止日期是什么？"
+        privacy = st.selectbox(
+            "你对隐私 / 独立卫生间的重视程度？",
+            ["不太在意", "有就更好", "非常在意"],
+            index=1,
+        )
+        stay_term = st.selectbox(
+            "计划住宿时间：",
+            ["单学期", "整学年（2 学期）"],
+            index=1,
         )
 
-with col2:
-    st.caption("🪪 Student's Pass / 签证")
-    if st.button("STP 的 SOLAR 办理流程", key="qs_stp_1"):
-        st.session_state["prefill"] = (
-            "我已经拿到 NTU 的 offer，请告诉我如何通过 SOLAR 申请 Student's Pass（STP），"
-            "需要哪些步骤和费用？"
-        )
-    if st.button("办理 STP 需要哪些体检", key="qs_stp_2"):
-        st.session_state["prefill"] = (
-            "办理 Student's Pass 需要做什么体检？在 NTU 校医院可以完成吗？"
-        )
+        if st.button("生成宿舍推荐与申请计划", key="btn_housing_plan"):
+            # 避免顶部循环 import，这里在本地导入
+            from chat import generate_housing_plan
 
+            with st.spinner("正在根据你的偏好生成方案..."):
+                plan = generate_housing_plan(
+                    {
+                        "budget": budget,
+                        "privacy": privacy,
+                        "stay_term": stay_term,
+                    },
+                    deepseek_api_key,
+                )
 
-# --- 3. 聊天主逻辑 ---
+            st.markdown(plan)
+
+# --- 聊天主逻辑 ---
 run_chat(deepseek_api_key)
+
+# --- 简单使用数据 / 实验分析 ---
+st.divider()
+with st.expander("📈 简单使用数据（本地调试用）", expanded=False):
+    if not os.path.exists("feedback_log.csv"):
+        st.caption("目前还没有任何反馈数据。可以在每次回答下面点 👍 或 👎 来记录反馈。")
+    else:
+        rows = []
+        with open("feedback_log.csv", "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+
+        total = len(rows)
+        ups = sum(1 for r in rows if r.get("label") == "up")
+        downs = sum(1 for r in rows if r.get("label") == "down")
+
+        st.write(f"共收集到 {total} 条反馈，其中 👍 {ups} 条，👎 {downs} 条。")
+
+        st.caption("最近 5 条反馈（问题 & 是否使用 RAG）：")
+        for r in rows[-5:]:
+            q = (r.get("question") or "")[:80]
+            used_rag = r.get("used_rag")
+            st.markdown(
+                f"- **Q**: {q}..."
+                f"  ｜ Used RAG: `{used_rag}` ｜ Label: `{r.get('label')}`"
+            )
