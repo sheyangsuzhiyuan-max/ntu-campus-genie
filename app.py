@@ -295,6 +295,57 @@ with tab2:
                 st.markdown("---")
                 st.markdown(plan)
 
+                # 保存到 session_state 以便反馈
+                st.session_state["housing_plan"] = plan
+                st.session_state["housing_preferences"] = {
+                    "budget": budget,
+                    "privacy": privacy,
+                    "stay_term": stay_term,
+                }
+
+        # 显示反馈按钮（如果有生成的推荐）
+        if "housing_plan" in st.session_state and st.session_state.get("housing_plan"):
+            st.markdown("---")
+            st.caption("Was this recommendation helpful?")
+
+            # 检查是否已有反馈
+            if "housing_feedback" not in st.session_state:
+                st.session_state["housing_feedback"] = None
+
+            if st.session_state["housing_feedback"] is None:
+                fb_col1, fb_col2 = st.columns(2)
+                with fb_col1:
+                    if st.button("👍 Helpful", key="housing_fb_up"):
+                        from utils import log_feedback
+                        interaction = {
+                            "question": f"Housing Wizard: {st.session_state.get('housing_preferences', {})}",
+                            "answer": st.session_state["housing_plan"],
+                            "used_rag": True,
+                            "sources": ["Housing Wizard"],
+                        }
+                        if log_feedback("up", interaction):
+                            st.session_state["housing_feedback"] = "up"
+                            st.toast("Thank you for your feedback!", icon="👍")
+                            st.rerun()
+                with fb_col2:
+                    if st.button("👎 Not Helpful", key="housing_fb_down"):
+                        from utils import log_feedback
+                        interaction = {
+                            "question": f"Housing Wizard: {st.session_state.get('housing_preferences', {})}",
+                            "answer": st.session_state["housing_plan"],
+                            "used_rag": True,
+                            "sources": ["Housing Wizard"],
+                        }
+                        if log_feedback("down", interaction):
+                            st.session_state["housing_feedback"] = "down"
+                            st.toast("Feedback recorded!", icon="👎")
+                            st.rerun()
+            else:
+                if st.session_state["housing_feedback"] == "up":
+                    st.caption("✅ You found this helpful")
+                else:
+                    st.caption("✅ Feedback recorded")
+
 # --- Fixed Footer ---
 st.markdown(
     """
