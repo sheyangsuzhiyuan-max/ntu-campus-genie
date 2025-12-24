@@ -190,9 +190,56 @@ def run_chat(deepseek_api_key: str) -> None:
     # 1. 初始化会话 & 最近一次交互
     init_session_state()
 
-    # 2. 展示历史消息
-    for msg in st.session_state.messages:
-        st.chat_message(msg["role"]).write(msg["content"])
+    # 2. 展示历史消息（带反馈按钮）
+    for idx, msg in enumerate(st.session_state.messages):
+        with st.chat_message(msg["role"]):
+            st.write(msg["content"])
+
+            # 为每条助手消息添加反馈按钮（跳过欢迎消息）
+            if msg["role"] == "assistant" and idx > 0:
+                # 检查是否已经有反馈记录
+                feedback_key = f"feedback_{idx}"
+                if feedback_key not in st.session_state:
+                    st.session_state[feedback_key] = None
+
+                # 如果还没有反馈，显示按钮
+                if st.session_state[feedback_key] is None:
+                    fb_col1, fb_col2 = st.columns(2)
+                    with fb_col1:
+                        if st.button("👍 Helpful", key=f"fb_up_{idx}"):
+                            # 从消息中提取问答信息
+                            question = st.session_state.messages[idx - 1]["content"] if idx > 0 else ""
+                            answer = msg["content"]
+                            interaction = {
+                                "question": question,
+                                "answer": answer,
+                                "used_rag": msg.get("used_rag", False),
+                                "sources": msg.get("sources", []),
+                            }
+                            if log_feedback("up", interaction):
+                                st.session_state[feedback_key] = "up"
+                                st.toast("Thank you for your feedback!", icon="👍")
+                                st.rerun()
+                    with fb_col2:
+                        if st.button("👎 Not Helpful", key=f"fb_down_{idx}"):
+                            question = st.session_state.messages[idx - 1]["content"] if idx > 0 else ""
+                            answer = msg["content"]
+                            interaction = {
+                                "question": question,
+                                "answer": answer,
+                                "used_rag": msg.get("used_rag", False),
+                                "sources": msg.get("sources", []),
+                            }
+                            if log_feedback("down", interaction):
+                                st.session_state[feedback_key] = "down"
+                                st.toast("Feedback recorded!", icon="👎")
+                                st.rerun()
+                else:
+                    # 已经有反馈，显示状态
+                    if st.session_state[feedback_key] == "up":
+                        st.caption("✅ You found this helpful")
+                    else:
+                        st.caption("✅ Feedback recorded")
 
     # 3. Support "prefilled questions" (from quick start buttons) + manual input
     user_input = st.chat_input("Type your question here...")
@@ -295,6 +342,36 @@ def run_chat(deepseek_api_key: str) -> None:
                         for name in source_names:
                             st.caption(f"- {name}")
 
+                # 新回答的反馈按钮（立即显示）
+                fb_col1, fb_col2 = st.columns(2)
+                with fb_col1:
+                    if st.button("👍 Helpful", key=f"fb_up_new_{len(st.session_state.messages)}"):
+                        interaction = {
+                            "question": prompt,
+                            "answer": answer,
+                            "used_rag": True,
+                            "sources": source_names,
+                        }
+                        if log_feedback("up", interaction):
+                            # 保存反馈状态
+                            next_idx = len(st.session_state.messages) + 1
+                            st.session_state[f"feedback_{next_idx}"] = "up"
+                            st.toast("Thank you for your feedback!", icon="👍")
+                            st.rerun()
+                with fb_col2:
+                    if st.button("👎 Not Helpful", key=f"fb_down_new_{len(st.session_state.messages)}"):
+                        interaction = {
+                            "question": prompt,
+                            "answer": answer,
+                            "used_rag": True,
+                            "sources": source_names,
+                        }
+                        if log_feedback("down", interaction):
+                            next_idx = len(st.session_state.messages) + 1
+                            st.session_state[f"feedback_{next_idx}"] = "down"
+                            st.toast("Feedback recorded!", icon="👎")
+                            st.rerun()
+
             used_rag = True
 
         # 7. If no knowledge base, fallback to general chat
@@ -304,10 +381,44 @@ def run_chat(deepseek_api_key: str) -> None:
                 answer = response.content
                 st.write(answer)
 
-        # 8. Add assistant response to history
-        st.session_state.messages.append({"role": "assistant", "content": answer})
+                # 新回答的反馈按钮（立即显示 - 非RAG模式）
+                fb_col1, fb_col2 = st.columns(2)
+                with fb_col1:
+                    if st.button("👍 Helpful", key=f"fb_up_new_{len(st.session_state.messages)}"):
+                        interaction = {
+                            "question": prompt,
+                            "answer": answer,
+                            "used_rag": False,
+                            "sources": [],
+                        }
+                        if log_feedback("up", interaction):
+                            next_idx = len(st.session_state.messages) + 1
+                            st.session_state[f"feedback_{next_idx}"] = "up"
+                            st.toast("Thank you for your feedback!", icon="👍")
+                            st.rerun()
+                with fb_col2:
+                    if st.button("👎 Not Helpful", key=f"fb_down_new_{len(st.session_state.messages)}"):
+                        interaction = {
+                            "question": prompt,
+                            "answer": answer,
+                            "used_rag": False,
+                            "sources": [],
+                        }
+                        if log_feedback("down", interaction):
+                            next_idx = len(st.session_state.messages) + 1
+                            st.session_state[f"feedback_{next_idx}"] = "down"
+                            st.toast("Feedback recorded!", icon="👎")
+                            st.rerun()
 
-        # Record last interaction for feedback
+        # 8. Add assistant response to history（保存 used_rag 和 sources 信息）
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": answer,
+            "used_rag": used_rag,
+            "sources": source_names,
+        })
+
+        # Record last interaction for feedback (保留以便兼容其他可能的用途)
         st.session_state["last_interaction"] = {
             "question": prompt,
             "answer": answer,
@@ -315,16 +426,7 @@ def run_chat(deepseek_api_key: str) -> None:
             "sources": source_names,
         }
 
-        # 9. Feedback buttons (only for the latest response)
-        fb_col1, fb_col2 = st.columns(2)
-        with fb_col1:
-            if st.button("👍 Helpful", key=get_unique_button_key("fb_up")):
-                if log_feedback("up", st.session_state["last_interaction"]):
-                    st.toast("Thank you for your feedback!", icon="👍")
-        with fb_col2:
-            if st.button("👎 Not Helpful", key=get_unique_button_key("fb_down")):
-                if log_feedback("down", st.session_state["last_interaction"]):
-                    st.toast("Feedback recorded!", icon="👎")
+        # 注意：反馈按钮现在在历史消息展示部分（第193-242行），每条消息都有独立的按钮
 
     except Exception as e:
         import traceback
