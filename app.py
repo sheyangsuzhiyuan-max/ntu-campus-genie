@@ -224,31 +224,11 @@ with tab1:
 
 # --- Tab 2: Housing Wizard ---
 with tab2:
-    st.markdown("### 🏠 Graduate Housing Recommendation Wizard")
-
     if "vectorstore" not in st.session_state:
         st.warning("⚠️ Please load the knowledge base first from the sidebar.")
     else:
-        # Add intro and steps
-        st.caption(
-            "Get personalized housing recommendations based on your preferences. "
-            "Select your budget, privacy needs, and stay duration below."
-        )
-
-        st.markdown("---")
-
-        # Step indicators
-        col_step1, col_step2, col_step3 = st.columns(3)
-        with col_step1:
-            st.caption("**Step 1:** Set Preferences")
-        with col_step2:
-            st.caption("**Step 2:** Generate Plan")
-        with col_step3:
-            st.caption("**Step 3:** Review Results")
-
-        st.markdown("---")
-
-        # Preferences form
+        # 标题和选项卡融合在一起
+        st.caption("🏠 Housing Recommendation Wizard")
         col_a, col_b, col_c = st.columns(3)
 
         with col_a:
