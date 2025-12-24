@@ -11,3 +11,5 @@ faiss-cpu
 pypdf
 tiktoken
 beautifulsoup4
+flashrank
+lxml

@@ -1,0 +1,405 @@
+NTU 研究生宿舍申请完整指南（2024-2025学年）
+抓取时间: 2024年最新版本
+来源: 综合整理自NTU官网、学长学姐经验、论坛精华
+
+================================================================================
+
+=== 第一部分：宿舍类型与价格 ===
+
+Q1: NTU研究生可以申请哪些宿舍？
+Q1 (EN): What types of graduate housing are available at NTU?
+A: NTU研究生主要可以申请以下宿舍类型：
+A (EN): NTU graduate students can mainly apply for the following accommodation types:
+
+1. Graduate Hall (GH) - 研究生公寓 / Graduate Residence
+   - Graduate Hall 1 (Crescent Hall)
+   - Graduate Hall 2 (Pioneer Hall)
+   - Graduate Hall 15
+   - Graduate Hall 16
+
+   房型与价格（月租，含水电网）/ Room Types & Prices (monthly rent, utilities included):
+   • 双人间（Twin-sharing）: SGD 420-480
+   • 单人间（Single）: SGD 580-650
+   • 单人间带独立卫浴（Single with attached bathroom）: SGD 700-800
+
+   设施：
+   • 空调、床、书桌、衣柜
+   • 公共厨房（可做饭）
+   • 洗衣房（投币式洗衣机）
+   • 学习室、健身房
+   • BBQ pit
+
+2. North Hill - 较新的研究生宿舍
+   房型与价格：
+   • 单人间带独立卫浴: SGD 850-920/月
+   • 更现代化，房间较大
+   • 有电梯（GH没有电梯）
+
+   设施：
+   • 独立卫浴（shower + toilet）
+   • 小厨房（部分房型）
+   • 空调、全套家具
+   • 公共休息区
+
+3. Hall of Residence (Hall 1-16) - 本科生宿舍
+   • 研究生如果GH满了，可能会被分配到Hall
+   • 价格相对便宜: SGD 350-500/月
+   • 但氛围更偏本科生，活动较多（有些强制参加）
+
+Q2: 哪种宿舍最划算？
+Q2 (EN): Which accommodation option offers the best value?
+A: 性价比排名（仅供参考）：
+A (EN): Cost-effectiveness ranking (for reference):
+
+1. GH 双人间（最省钱）/ GH Twin-sharing (Most economical)
+   • 优点 / Pros: 便宜，室友可能是同专业学长 / Cheap, roommate might be senior from same major
+   • 缺点 / Cons: 隐私一般，需要协调作息 / Limited privacy, need to coordinate schedules
+
+2. GH 单人间（平衡之选）⭐推荐 / GH Single room (Balanced choice) ⭐Recommended
+   • 优点 / Pros: 有私人空间，价格适中 / Private space, moderate price
+   • 缺点 / Cons: 卫浴是公共的（一层楼共享） / Shared bathroom (per floor)
+
+3. North Hill（预算充足）/ North Hill (If budget allows)
+   • 优点 / Pros: 新、干净、独立卫浴 / New, clean, private bathroom
+   • 缺点 / Cons: 贵，离部分学院较远 / Expensive, far from some schools
+
+4. Hall（随缘）/ Hall (Depends on availability)
+   • 优点 / Pros: 便宜，认识本科生朋友 / Cheap, make undergraduate friends
+   • 缺点 / Cons: 可能有Hall activities要求 / May require participation in Hall activities
+
+Q3: 宿舍的具体位置在哪？到教学楼方便吗？
+Q3 (EN): Where are the accommodations located? Is it convenient to get to academic buildings?
+A:
+• Graduate Hall 1-2: 靠近 North Spine（学校中心），到图书馆走路5-10分钟 / Near North Spine (campus center), 5-10 mins walk to library
+• Graduate Hall 15-16: 在校园北侧，靠近 North Hill / Northern part of campus, near North Hill
+• North Hill: 校园最北端，到南边学院需要坐校内巴士 / Northernmost point, need campus bus to southern schools
+• Hall 1-16: 分散在校园各处 / Distributed across campus
+
+交通 / Transportation:
+• 校内免费巴士（Campus Rider）/ Free campus shuttle: 红线、蓝线覆盖主要宿舍区 / Red & Blue lines cover major residential areas
+• 走路到最近的教学楼 / Walk to nearest academic building: 5-15分钟 / 5-15 mins
+• 到地铁站（Pioneer MRT）/ To Pioneer MRT station: 步行15-20分钟或坐巴士 / 15-20 mins walk or take bus
+
+================================================================================
+
+=== 第二部分：申请流程与时间 ===
+
+Q4: 宿舍申请什么时候开始？
+Q4 (EN): When does housing application open?
+A: 关键时间节点（2024-2025参考）：
+A (EN): Key dates (2024-2025 reference):
+
+【8月入学（秋季学期）/ August Intake (Fall Semester)】
+• 4月中旬 / Mid-April: 开放申请（收到录取通知后即可申请） / Application opens (apply after receiving admission offer)
+• 5月31日 / May 31: 第一轮截止 / Round 1 deadline
+• 6月中旬 / Mid-June: 公布第一轮结果 / Round 1 results announced
+• 7月15日 / July 15: 第二轮截止（如果还有余位） / Round 2 deadline (if space available)
+• 7月底 / Late July: 最终结果 / Final results
+
+【1月入学（春季学期）/ January Intake (Spring Semester)】
+• 10月开放申请 / October: Application opens
+• 11月底截止 / Late November: Deadline
+• 12月公布结果 / December: Results announced
+
+⚠️ 重要提示 / Important tips:
+• 越早申请越好，先到先得！/ Apply early, first-come-first-served!
+• 第一轮结果出来后，如果没分到，会自动进入候补名单 / If not allocated in Round 1, auto-added to waitlist
+• 有些人会放弃offer，所以候补有希望 / Some reject offers, so waitlist has chances
+
+Q5: 如何申请宿舍？详细步骤是什么？
+Q5 (EN): How do I apply for graduate housing? What are the detailed steps?
+A: 申请步骤（在线申请）：
+A (EN): Application steps (online application):
+
+步骤1 / Step 1: 登录 Student Link Portal / Login to Student Link Portal
+• 网址 / URL: https://studentlink.ntu.edu.sg
+• 用你的 NTU 账号登录（录取后会收到邮件）
+• Login with your NTU account (you'll receive email after admission)
+
+步骤2 / Step 2: 进入 "Accommodation Application" / Go to "Accommodation Application"
+• 左侧菜单找到 "Housing" 或 "Accommodation"
+• Find "Housing" or "Accommodation" in left menu
+• 点击 "Apply for Graduate Hall" / Click "Apply for Graduate Hall"
+
+步骤3 / Step 3: 填写偏好表单 / Fill in preference form
+必填信息 / Required information:
+• 宿舍偏好排序（可选3个）/ Accommodation preference ranking (select 3)
+  例如 / Example: 1st choice: GH1 Single
+        2nd choice: GH2 Twin-sharing
+        3rd choice: North Hill
+• 室友偏好（如果选双人间）/ Roommate preference (if choosing twin room)
+• 特殊需求（如需要一楼房间因为健康原因）/ Special needs (e.g., ground floor for health reasons)
+
+步骤4 / Step 4: 上传材料 / Upload documents
+• 录取通知书（Offer Letter） / Admission Letter (Offer Letter)
+• 护照复印件 / Passport copy
+• 存款证明（部分情况需要）/ Financial proof (if required)
+
+步骤5 / Step 5: 支付申请费 / Pay application fee
+• 费用 / Fee: SGD 20（不退 / non-refundable）
+• 支付方式: 信用卡 / 借记卡
+
+步骤6: 提交申请
+• 检查所有信息
+• 点击 Submit
+• 保存确认邮件（Confirmation Email）
+
+Q6: 如果申请不到宿舍怎么办？
+Q6 (EN): What if I don't get on-campus housing?
+A: 备选方案：
+A (EN): Alternative options:
+
+1. 候补名单（Waitlist） / Waitlist
+   • 自动进入，无需额外操作 / Auto-added, no extra action needed
+   • 8月可能会有人退宿，持续关注邮件 / Some may withdraw in August, monitor emails
+
+2. 校外租房 / Off-campus rental
+   推荐区域 / Recommended areas:
+   • Boon Lay（文礼）: 离NTU最近，15分钟车程 / Closest to NTU, 15 mins by transport
+   • Jurong East（裕廊东）: 生活便利，商场多 / Convenient, many malls
+   • Clementi（金文泰）: 稍远但更繁华 / Slightly farther but more vibrant
+
+   租金参考 / Rental reference:
+   • 主人房（Master Room）: SGD 800-1200/月 / month
+   • 普通房（Common Room）: SGD 600-900/月 / month
+   • 包租整套（Whole unit）: SGD 2500-3500/月 / month
+
+   找房平台 / Rental platforms:
+   • PropertyGuru
+   • 99.co
+   • NTU新生微信群（很多学长转租） / NTU WeChat groups (seniors subletting)
+
+3. 短期住宿 → 到新加坡后再找 / Short-term stay → find after arrival
+   • Airbnb（1-2周 / weeks）
+   • 青旅/Hostel / Youth hostel
+   • 找已在新加坡的学长临时借住 / Stay temporarily with seniors in Singapore
+
+================================================================================
+
+=== 第三部分：入住与生活 ===
+
+Q7: 拿到宿舍offer后要做什么？
+A:
+步骤1: 接受offer（7天内）
+• 登录 Student Link 点击 "Accept"
+• 逾期视为放弃
+
+步骤2: 支付住宿费
+方式1: 一次性支付整学期
+• 8月入学: 8月-12月（5个月）
+• 1月入学: 1月-5月（5个月）
+
+方式2: 分期支付（每月）
+• 需要设置 GIRO（新加坡银行自动扣款）
+
+金额:
+• 月租 × 月数
+• 押金: 1个月月租（可退）
+• 行政费: SGD 50
+
+步骤3: 预约入住时间
+• 选择 Check-in date（建议开学前2-3天到）
+• 如果提前到，需要申请 Early check-in（可能额外收费）
+
+Q8: 入住当天需要带什么？
+A:
+必带物品:
+✅ 护照原件
+✅ 录取通知书
+✅ Student Pass approval letter
+✅ 住宿确认邮件
+
+宿舍会提供:
+✅ 床、床垫
+✅ 书桌、椅子
+✅ 衣柜
+✅ 空调、电风扇
+
+需要自己买的:
+❌ 床上用品（床单、被子、枕头）
+❌ 衣架
+❌ 洗漱用品
+❌ 拖鞋
+❌ 台灯
+
+💡 省钱技巧:
+• IKEA买全套床品（SGD 30-50）
+• 等Daiso（类似名创优品，SGD 2 shop）
+• 或问学长学姐要二手
+
+Q9: 宿舍可以做饭吗？
+A:
+• GH 有公共厨房（每层或每栋）
+  - 有煤气灶、冰箱
+  - 需要自己买锅碗瓢盆
+  - 用完要清洗干净（否则会被投诉）
+
+• North Hill 部分房型有小厨房
+  - 电磁炉 + 小冰箱
+  - 更方便但功率有限
+
+• 火锅、烧烤等:
+  - 可以用公共BBQ pit（需要预约）
+  - 室内禁止明火
+
+• 外卖 / 食堂:
+  - Canteen 价格: SGD 3-5/餐
+  - GrabFood / Foodpanda 外卖: SGD 8-12/餐
+
+Q10: 宿舍有什么规定要注意？
+A:
+严格禁止（违反会被赶出宿舍）:
+🚫 在房间吸烟（整个校园禁烟，只能在指定区域）
+🚫 带异性过夜（新加坡大学都这样）
+🚫 养宠物
+🚫 改装电路、私接电器
+🚫 大声喧哗（晚上11点后）
+
+需要注意:
+⚠️ 访客登记（访客需要在门口登记，晚上11点前离开）
+⚠️ 垃圾分类（部分宿舍要求）
+⚠️ 定期检查（RA会抽查房间卫生）
+
+其他:
+• 可以贴海报、挂照片（不损坏墙面）
+• 可以自己买小冰箱、微波炉（功率限制）
+• Wi-Fi 免费（NTU_Wifi）
+
+================================================================================
+
+=== 第四部分：费用与退宿 ===
+
+Q11: 住宿总共要花多少钱？
+A:
+以 GH1 单人间为例（1学期 = 5个月）:
+
+| 项目 | 金额 (SGD) | 说明 |
+|------|------------|------|
+| 申请费 | 20 | 一次性，不退 |
+| 押金 | 600 | 退宿时退还 |
+| 月租 × 5 | 3000 | 600 × 5个月 |
+| 行政费 | 50 | 学期费用 |
+| 水电网（包含在月租内）| 0 | 已包含 |
+| **总计** | **3670** | **首次支付** |
+
+后续学期:
+• 只需支付月租，押金不需要再交
+• 如果续住，提前1个月申请
+
+Q12: 可以提前退宿吗？押金能退吗？
+A:
+提前退宿:
+• 需要提前1个月通知 Housing Office
+• 填写 "Termination of Stay" 表格
+• 剩余月份租金不退（除非特殊情况，如休学、退学）
+
+押金退还:
+• 退宿时检查房间（Room inspection）
+• 如果没有损坏，押金全额退还
+• 如果有损坏，扣除维修费后退还
+• 一般2-4周到账
+
+常见扣费项:
+• 墙面有钉子孔: SGD 20-50
+• 家具损坏: 按价格赔偿
+• 房间太脏: SGD 50 清洁费
+
+💡 避免扣费技巧:
+• 退房前彻底打扫
+• 用牙膏补墙上的小洞
+• 拍照存证（入住时和退房时）
+
+================================================================================
+
+=== 第五部分：常见问题 FAQ ===
+
+Q13: 我的专业在南边（如艺术学院），住北边的GH会很远吗？
+A:
+• 走路: 20-25分钟（可以当锻炼）
+• 坐校内巴士: 10-15分钟
+• 骑自行车: 8-10分钟（很多学生买二手自行车）
+
+建议:
+• 如果介意，申请时选南边的Hall（Hall 1, 2, 3）
+• 或者租校外（Boon Lay / Jurong East）
+
+Q14: 双人间的室友是随机分配的吗？
+A:
+• 默认随机分配（通常会匹配同性别、类似专业）
+• 可以申请指定室友（Roommate request）
+  - 需要你和对方都填写对方的学号
+  - 成功率90%以上
+
+• 如果室友不合拍可以换吗？
+  - 可以，但需要等有空房
+  - 填写 "Room change request"
+  - 通常要等1-2个月
+
+Q15: 作为国际学生，有优先分配吗？
+A:
+• 没有国籍优先政策，都是先到先得
+• 但国际学生（尤其Master）通常会比本地学生更早申请
+• PhD学生在某些宿舍有优先权（如Graduate Hall 15-16）
+
+Q16: 宿舍附近有超市吗？
+A:
+校内:
+• Canteen 小卖部（零食、日用品）
+• 7-Eleven（North Spine）
+
+校外（步行距离）:
+• Pioneer Mall（15分钟）: Giant超市、餐厅
+• Jurong Point（坐巴士15分钟）: 大商场，啥都有
+
+网购:
+• RedMart（网上超市，送货上门）
+• Lazada / Shopee（东南亚淘宝）
+
+Q17: 宿舍安全吗？
+A:
+• 非常安全，新加坡治安全球顶级
+• 宿舍楼需要刷卡进入（Access card）
+• 有监控摄像头
+• 有24小时保安（部分宿舍）
+
+但还是要注意:
+• 贵重物品锁起来（尤其双人间）
+• 出门锁门
+• 不要把门禁卡借给别人
+
+Q18: 宿舍会举办活动吗？
+A:
+GH（研究生宿舍）:
+• 偶尔有Welcome party、BBQ、电影之夜
+• 不强制参加，比较自由
+
+Hall（本科生宿舍）:
+• 活动非常多（Hall activities）
+• 有些Hall要求参加一定次数（否则下学期不能续住）
+• 包括运动会、晚会、义工等
+
+如果你想专心学习，建议选GH或North Hill。
+
+================================================================================
+
+=== 联系方式 ===
+
+Housing Office:
+📧 Email: hostel@ntu.edu.sg
+📞 电话: +65 6790 5647
+🏢 办公室: Student Services Centre (SSC), Level 1
+
+在线咨询:
+• Student Link Portal (提交 enquiry)
+• NTU官网 Live Chat（工作日 9am-5pm）
+
+学长学姐资源:
+• 加入NTU新生微信群
+• 小红书搜索 "NTU宿舍"
+• 知乎 NTU 话题
+
+================================================================================
+
+最后更新: 2024年
+提醒: 政策可能变化，以 NTU 官网为准
+祝你申请顺利！🎉

@@ -1,0 +1,268 @@
+# NTU Campus Map & Navigation Guide (校园地图与导航指南)
+
+## 校园区域划分
+
+NTU 校园面积约 200 公顷，主要分为以下几个区域：
+
+### 1. North Spine (北脊区)
+**主要建筑**：
+- North Spine Plaza (北脊广场) - 校园中心枢纽
+- Hive Learning Hub (蜂巢学习中心) - 现代化教学楼
+- School of Art, Design and Media (艺术设计与媒体学院)
+- Lee Wee Nam Library (李伟南图书馆) - 主图书馆
+- Nanyang Auditorium (南洋礼堂)
+
+**如何到达**：
+- 从 Pioneer MRT 乘坐 Red Line 巴士，约 5 分钟
+- 从主大门步行约 15 分钟
+- GPS 坐标：1.3471° N, 103.6831° E
+
+**周边设施**：
+- 多个食堂（Canteen 1, Canteen 2）
+- 7-Eleven 便利店
+- ATM 机
+- 学生活动中心
+
+### 2. South Spine (南脊区)
+**主要建筑**：
+- Nanyang Business School (南洋商学院)
+- School of Humanities (人文学院)
+- School of Social Sciences (社会科学学院)
+- South Spine Food Court (南脊美食中心)
+
+**如何到达**：
+- 从 North Spine Plaza 步行 10 分钟
+- 乘坐 Red Line 巴士南向
+- GPS 坐标：1.3450° N, 103.6820° E
+
+### 3. Research & Engineering Zone (科研与工程区)
+**主要建筑**：
+- School of Computer Science and Engineering (计算机科学与工程学院，简称 SCSE)
+  * 地址：Block N4, Nanyang Avenue
+  * 如何到达：从 North Spine 乘巴士约 8 分钟，步行约 20 分钟
+- School of Electrical and Electronic Engineering (电气与电子工程学院，简称 EEE)
+  * 地址：Block S2
+- School of Mechanical and Aerospace Engineering (机械与航空航天工程学院，简称 MAE)
+  * 地址：Block N3
+
+**导航提示**：
+- 这个区域比较分散，建议使用 NTU Mobile App 导航
+- 雨天可以走连廊，但路线会比较绕
+
+### 4. Student Residence Area (学生宿舍区)
+**本科生宿舍（Halls）**：
+- Hall 1, 2, 3 - 位于北部，靠近 Pioneer MRT
+- Hall 4, 5, 6, 7, 8, 9, 10 - 位于中部和西部
+
+**研究生宿舍**：
+- Hall 11, 12, 13, 14, 15, 16（Graduate Halls）- 位于东南部
+  * 从 North Spine 乘坐 Red Line 约 12-15 分钟
+  * GPS 坐标：1.3430° N, 103.6870° E
+- Crescent Hall（新月堂）
+- Tamarind Hall（罗望子堂）
+
+**North Hill 研究生宿舍区**：
+- 位于校园北部，环境安静
+- 从 Pioneer MRT 步行约 10 分钟
+- 有独立的食堂和健身房
+
+### 5. Sports & Recreation (体育与休闲区)
+**主要设施**：
+- Nanyang Gymnasium (南洋体育馆)
+  * 设施：篮球场、羽毛球场、健身房、游泳池
+  * 开放时间：周一至周日 7:00 AM - 10:00 PM
+  * 位置：校园西侧，近 Hall 3
+- Track and Field (田径场)
+- Tennis Courts (网球场)
+- Adventure & Wellness Centre (探险与健康中心)
+
+**如何到达体育馆**：
+- 从 North Spine 乘坐 Red Line，在 "Sports Hall" 站下车
+- 从 Pioneer MRT 步行约 12 分钟
+
+## 重要地标导航
+
+### 图书馆系统
+
+**Lee Wee Nam Library (李伟南图书馆) - 主图书馆**
+- 位置：North Spine Plaza 对面
+- 开放时间：周一至周日 24 小时（考试周）/ 平时 8:30 AM - 10:00 PM
+- 如何到达：从 Pioneer MRT 乘 Red Line 到 "North Spine" 站，步行 3 分钟
+- 设施：自习区、小组讨论室、电脑室、打印服务
+
+**其他分馆**：
+- Art, Design & Media Library (ADM 图书馆) - 位于 ADM 楼内
+- Chinese Heritage Centre Library (华裔馆图书馆)
+
+### 食堂推荐及位置
+
+**Canteen A（北山食堂）**
+- 位置：North Hill 宿舍区旁
+- 特色：西餐、中餐、印度餐、素食
+- 营业时间：7:00 AM - 9:00 PM
+- 推荐：西餐摊的 Chicken Chop 和印度餐的 Briyani
+
+**Canteen B（北脊食堂）**
+- 位置：North Spine Plaza 附近
+- 特色：日韩料理、粤式烧腊、马来餐
+- 营业时间：7:00 AM - 8:30 PM
+
+**Koufu @ Nanyang Executive Centre (NEC)**
+- 位置：靠近商学院
+- 特色：连锁美食广场，选择多样
+- 营业时间：8:00 AM - 9:00 PM
+
+**Quad Cafe（学生活动中心咖啡厅）**
+- 位置：Student Activity Centre (SAC)
+- 特色：西式快餐、咖啡、甜点
+- 营业时间：9:00 AM - 7:00 PM
+
+**Pioneer Food Court**
+- 位置：靠近 Pioneer MRT 站出口
+- 特色：各类本地美食，价格实惠
+- 营业时间：7:00 AM - 9:00 PM
+
+### 医疗与健康
+
+**NTU Medical Centre (校医疗中心)**
+- 位置：North Spine Plaza 附近
+- 营业时间：周一至周五 8:30 AM - 5:30 PM，周六 8:30 AM - 1:00 PM
+- 服务：全科医疗、牙科、心理咨询
+- 预约电话：+65 6790 4601
+
+**24 小时紧急医疗**：
+- 最近的医院：Ng Teng Fong General Hospital（黄廷芳综合医院）
+- 地址：1 Jurong East Street 21
+- 从 NTU 乘坐出租车约 10-15 分钟，或乘地铁到 Jurong East 站
+
+### 超市与购物
+
+**FairPrice @ Pioneer MRT**
+- 位置：Pioneer MRT 站内
+- 营业时间：8:00 AM - 10:00 PM
+- 大型超市，日用品齐全
+
+**7-Eleven 便利店**（多个位置）：
+- North Spine Plaza
+- Hall 11 附近
+- Canteen B 旁
+- 营业时间：24 小时
+
+**Cheers 便利店**：
+- 位于部分宿舍楼底层
+
+## 从宿舍到主要目的地的路线
+
+### 从研究生宿舍（Hall 11-16）出发
+
+**→ 到图书馆（Lee Wee Nam Library）**
+1. 在宿舍楼下巴士站乘坐 Red Line
+2. 到 "North Spine" 站下车
+3. 步行 3 分钟到图书馆
+总时长：约 18-20 分钟
+
+**→ 到 SCSE（计算机学院）**
+1. 乘坐 Red Line 到 "SCSE" 站
+2. 或步行约 15 分钟（经过 Hive）
+总时长：约 20 分钟
+
+**→ 到 Pioneer MRT（去市区）**
+1. 在宿舍楼下乘坐 Red Line 反向
+2. 到 "Pioneer MRT" 终点站
+总时长：约 15 分钟
+
+**→ 到体育馆**
+1. 步行约 12 分钟，或乘坐 Red Line
+2. 路线：宿舍区 → Hive → Sports Hall
+
+### 从 North Hill 出发
+
+**→ 到图书馆**
+- 步行约 15 分钟（经过 North Spine Plaza）
+- 或乘坐 Blue Line，5 分钟
+
+**→ 到南洋商学院**
+- 步行约 20 分钟
+- 或乘坐 Blue Line → North Spine → 换乘 Red Line 南向
+
+## 校园外交通
+
+### 前往市区（City Area / Marina Bay）
+
+**方案 1：地铁**
+1. 从 NTU 乘校园巴士到 Pioneer MRT
+2. 乘坐东西线（East-West Line）绿线
+3. 在 Jurong East 站换乘南北线（North-South Line）红线
+4. 到达 City Hall 或 Marina Bay 站
+总时长：约 50-60 分钟
+
+**方案 2：直达巴士（周末）**
+- NTU 提供周末直达巴士到乌节路（Orchard）和市区
+- 需提前在 NTU Mobile App 预约
+
+### 前往樟宜机场（Changi Airport）
+
+**方案 1：地铁**
+1. Pioneer MRT → Tanah Merah 站（换乘）
+2. Tanah Merah → Changi Airport
+总时长：约 1.5 小时
+
+**方案 2：出租车/Grab**
+- 费用：约 SGD 30-40
+- 时长：约 35-45 分钟（非高峰时段）
+
+### 前往购物中心
+
+**Jurong Point Shopping Mall (裕廊坊购物中心)**
+- 最近的大型购物中心
+- 路线：Pioneer MRT → Boon Lay MRT（2 站），步行 5 分钟
+- 或从 NTU 乘坐 Blue Line 到 Jurong East
+
+**IMM Outlet Mall**
+- 新加坡最大的奥特莱斯
+- 路线：Pioneer MRT → Jurong East MRT，步行 10 分钟
+
+## 校园导航 App 推荐
+
+**NTU Mobile (官方 App)**
+- 实时巴士追踪
+- 互动地图
+- 设施信息
+- 活动日历
+
+**Google Maps**
+- 适合规划校外路线
+- 步行导航比较准确
+
+**OneMap (新加坡官方地图)**
+- 详细的街道信息
+- 公共交通规划
+
+## 新生导航建议
+
+1. **第一周**：建议跟着高年级学长学姐熟悉路线，或参加新生导览活动
+2. **标记常用地点**：在地图 App 中保存宿舍、教室、图书馆、常去的食堂
+3. **提前 10 分钟出发**：初期不熟悉路线时，预留充足时间
+4. **下载离线地图**：以防网络不稳定
+5. **记住几个地标**：如 North Spine Plaza、Lee Wee Nam Library，方便问路
+
+## 校园安全与紧急联系
+
+**校园安保**：+65 6790 1234（24 小时）
+**医疗紧急**：995（新加坡急救电话）
+**警察**：999
+**校园迷路求助**：可以找任何穿 NTU 保安制服的工作人员
+
+## 常见问题
+
+**Q: 校园很大，我会迷路吗？**
+A: 初期可能会，但 NTU 的指示牌很清晰，加上手机导航，通常 1-2 周就能熟悉常用路线。
+
+**Q: 下雨天怎么办？**
+A: NTU 有很多连廊（covered walkways），大部分主要建筑之间都可以不淋雨。实在不行就等巴士或带伞。
+
+**Q: 晚上回宿舍安全吗？**
+A: 校园内有监控和定期保安巡逻，整体很安全。深夜建议走照明好的路线，或乘坐夜间巴士。
+
+**Q: 从教学楼到宿舍最快的路线是什么？**
+A: 取决于你的宿舍和教学楼位置，建议用 NTU Mobile App 规划路线。

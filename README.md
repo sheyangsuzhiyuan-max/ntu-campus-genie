@@ -40,21 +40,32 @@ At the same time, this project serves as a small, end-to-end example of:
 
 ### 1.3 Current focus / scenarios
 
-The current version ships with two sample text files (in Chinese):
+The current version ships with **comprehensive knowledge base files** (in Chinese):
 
-1. **Graduate Hall Application Guide**  
-   - Types of graduate halls (Graduate Hall 1/2, North Hill)  
-   - Monthly rates  
-   - Application key dates (for AY2025–2026)  
+1. **Graduate Hall Application Guide** (`ntu_hall.txt`)
+   - Types of graduate halls (Graduate Hall 1/2, North Hill)
+   - Monthly rates
+   - Application key dates (for AY2025–2026)
    - Application steps and FAQs
 
-2. **Student’s Pass (STP) Application Guide**  
-   - What STP is and who needs it  
-   - SOLAR application flow (Form 16, Form V36, fees)  
-   - Medical check-up requirements (HIV, X-ray, NTU clinic)  
+2. **Student's Pass (STP) Application Guide** (`ntu_visa.txt`)
+   - What STP is and who needs it
+   - SOLAR application flow (Form 16, Form V36, fees)
+   - Medical check-up requirements (HIV, X-ray, NTU clinic)
    - Collecting the card at ICA and required documents
 
-Users can upload these sample TXT files or their own NTU-related documents / URLs to build a small personal knowledge base.
+3. **🆕 Extended Housing Guide** (`ntu_housing_extended.txt`)
+   - 18 detailed Q&A covering:
+     - All accommodation types with pricing details
+     - Complete application timeline and steps
+     - Move-in procedures and living tips
+     - Cost breakdowns and refund policies
+     - Safety, facilities, and daily life
+   - Over **8000 characters** of comprehensive information
+
+**Quick Start**: Click the "🚀 Load Default Knowledge Base" button to instantly start using the chatbot with pre-loaded content!
+
+Users can also upload their own NTU-related documents / URLs to expand the knowledge base.
 
 
 ## 2. Feature Highlights
@@ -175,3 +186,53 @@ source .venv/bin/activate      # Windows: .venv\Scripts\activate
 # 2) Install dependencies
 pip install -r requirements.txt
 
+
+# 3) Get a DeepSeek API key
+# Visit https://platform.deepseek.com/api-keys
+
+# 4) Run the app
+streamlit run app.py
+```
+
+---
+
+## 5. Recent Improvements
+
+### Code Refactoring
+- **config.py**: Centralized configuration management (API settings, prompts, defaults)
+- **utils.py**: Reusable utility functions (feedback logging, session state management)
+- Improved error handling with user-friendly messages
+- Fixed Housing Plan parameter passing bug
+
+### Enhanced Knowledge Base
+- **Extended Housing Guide** (`ntu_housing_extended.txt`): 18 detailed Q&A with 8000+ characters
+- One-click default knowledge base loading
+- Coverage increased from ~5 to ~25 Q&A
+
+### UI/UX Improvements
+- "🚀 Load Default Knowledge Base" button for instant start
+- 5 example questions for quick exploration
+- Clear status indicators and helpful guidance
+- Feedback statistics visualization
+
+### Expandability
+- **Data Collection Tools**: Selenium scraper and Reddit API integration
+- See [KNOWLEDGE_BASE_GUIDE.md](KNOWLEDGE_BASE_GUIDE.md) for knowledge base expansion strategies
+
+---
+
+## 6. Documentation
+
+- **[README.md](README.md)** (this file) - Project overview and setup
+- **[KNOWLEDGE_BASE_GUIDE.md](KNOWLEDGE_BASE_GUIDE.md)** - How to expand the knowledge base
+- **[scripts/README.md](scripts/README.md)** - Data collection tools usage
+
+---
+
+## 7. License
+
+MIT License (or specify your preferred license)
+
+---
+
+**Made with ❤️ for NTU international graduate students**

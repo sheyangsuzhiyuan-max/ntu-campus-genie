@@ -1,0 +1,27 @@
+# Secrets - DO NOT COMMIT
+.streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Data (only exclude logs, keep knowledge base files)
+feedback_log.csv
+*.db
+data/.DS_Store
+
+# OS
+.DS_Store
+Thumbs.db

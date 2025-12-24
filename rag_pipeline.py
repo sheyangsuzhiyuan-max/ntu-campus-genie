@@ -1,38 +1,112 @@
 import os
 import tempfile
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 import streamlit as st
-# 引入 WebBaseLoader
 from langchain_community.document_loaders import PyPDFLoader, TextLoader, WebBaseLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
+from config import (
+    EMBEDDING_MODEL,
+    DEFAULT_CHUNK_SIZE,
+    DEFAULT_CHUNK_OVERLAP,
+    DEFAULT_KNOWLEDGE_FILES,
+)
+
 
 def build_knowledge_base(
-    uploaded_files,
-    urls: List[str],  # ✅ 关键修正：这里必须有 urls 参数
-    chunk_size: int,
-    chunk_overlap: int,
+    uploaded_files=None,
+    urls: Optional[List[str]] = None,
+    chunk_size: int = DEFAULT_CHUNK_SIZE,
+    chunk_overlap: int = DEFAULT_CHUNK_OVERLAP,
+    use_default_files: bool = False,
 ) -> None:
     """
-    从上传文件和 URL 构建向量知识库
+    从上传文件、URL 或默认文件构建向量知识库
+
+    Args:
+        uploaded_files: Streamlit 上传的文件列表
+        urls: 要爬取的 URL 列表
+        chunk_size: 文档切分大小
+        chunk_overlap: 文档切分重叠
+        use_default_files: 是否使用 data/ 目录下的默认文件
     """
+    # 初始化参数
+    uploaded_files = uploaded_files or []
+    urls = urls or []
+
     progress_bar = st.progress(0)
     status_text = st.empty()
 
     try:
         all_documents = []
         file_stats: List[Dict[str, Any]] = []
-        
+
+        # === 加载默认文件 ===
+        default_files = []
+        if use_default_files:
+            for file_path in DEFAULT_KNOWLEDGE_FILES:
+                if os.path.exists(file_path):
+                    default_files.append(file_path)
+                else:
+                    st.warning(f"⚠️ 默认文件不存在: {file_path}")
+
         # 计算总任务数
-        total_items = len(uploaded_files) + len(urls)
+        total_items = len(uploaded_files) + len(urls) + len(default_files)
         if total_items == 0:
-            st.warning("⚠️ 请至少上传一个文件或输入一个网址")
+            st.warning("⚠️ 请至少上传一个文件、输入一个网址或加载默认知识库")
             return
 
         current_item = 0
+
+        # === A0. 处理默认文件 ===
+        if default_files:
+            for file_path in default_files:
+                current_item += 1
+                progress = current_item / (total_items + 1)
+                progress_bar.progress(progress)
+                status_text.text(f"📖 Loading default file: {os.path.basename(file_path)}")
+
+                try:
+                    if file_path.lower().endswith(".pdf"):
+                        loader = PyPDFLoader(file_path)
+                    else:
+                        loader = TextLoader(file_path, encoding="utf-8")
+
+                    docs = loader.load()
+
+                    # 调试：打印加载结果的类型
+                    # st.write(f"DEBUG: 加载 {os.path.basename(file_path)}, 类型: {type(docs)}, 是列表: {isinstance(docs, list)}")
+
+                    # 确保 docs 是列表且所有元素都有 page_content 属性
+                    if not isinstance(docs, list):
+                        docs = [docs] if docs else []
+
+                    # 过滤并记录问题文档
+                    valid_docs = []
+                    for i, d in enumerate(docs):
+                        if hasattr(d, "page_content"):
+                            valid_docs.append(d)
+                        else:
+                            st.warning(f"⚠️ 文件 {os.path.basename(file_path)} 的第 {i} 个文档不是标准格式（类型: {type(d)}），已跳过")
+
+                    docs = valid_docs
+                    if not docs:
+                        st.warning(f"⚠️ 文件 {os.path.basename(file_path)} 没有提取到有效文档")
+                        continue
+
+                    all_documents.extend(docs)
+
+                    file_stats.append({
+                        "name": os.path.basename(file_path),
+                        "type": "📄 默认文件",
+                        "chars": sum(len(d.page_content) for d in docs)
+                    })
+                except Exception as e:
+                    st.error(f"❌ 默认文件 {file_path} 读取失败: {e}")
+                    continue
 
         # === A. 处理上传的文件 ===
         if uploaded_files:
@@ -40,7 +114,7 @@ def build_knowledge_base(
                 current_item += 1
                 progress = current_item / (total_items + 1)
                 progress_bar.progress(progress)
-                status_text.text(f"📖 正在加载文件: {uploaded_file.name}")
+                status_text.text(f"📖 Loading file: {uploaded_file.name}")
 
                 with tempfile.NamedTemporaryFile(delete=False, suffix=f".{uploaded_file.name.split('.')[-1]}") as tmp_file:
                     tmp_file.write(uploaded_file.getvalue())
@@ -50,21 +124,43 @@ def build_knowledge_base(
                     if uploaded_file.name.lower().endswith(".pdf"):
                         loader = PyPDFLoader(temp_filepath)
                     else:
-                        loader = TextLoader(temp_filepath)
-                    
+                        loader = TextLoader(temp_filepath, encoding="utf-8")
+
                     docs = loader.load()
+
+                    # 确保 docs 是列表且所有元素都有 page_content 属性
+                    if not isinstance(docs, list):
+                        docs = [docs] if docs else []
+
+                    # 过滤并记录问题文档
+                    valid_docs = []
+                    for i, d in enumerate(docs):
+                        if hasattr(d, "page_content"):
+                            valid_docs.append(d)
+                        else:
+                            st.warning(f"⚠️ 文件 {uploaded_file.name} 的第 {i} 个文档不是标准格式（类型: {type(d)}），已跳过")
+
+                    docs = valid_docs
+                    if not docs:
+                        st.warning(f"⚠️ 文件 {uploaded_file.name} 没有提取到有效文档")
+                        continue
+
                     all_documents.extend(docs)
-                    
+
                     file_stats.append({
                         "name": uploaded_file.name,
-                        "type": "📄 文件",
+                        "type": "📄 上传文件",
                         "chars": sum(len(d.page_content) for d in docs)
                     })
                 except Exception as e:
                     st.error(f"❌ 文件 {uploaded_file.name} 读取失败: {e}")
+                    continue
                 finally:
                     if os.path.exists(temp_filepath):
-                        os.unlink(temp_filepath)
+                        try:
+                            os.unlink(temp_filepath)
+                        except Exception:
+                            pass  # 静默处理清理失败
 
         # === B. 处理 URL (带浏览器伪装) ===
         if urls:
@@ -74,7 +170,7 @@ def build_knowledge_base(
                 current_item += 1
                 progress = current_item / (total_items + 1)
                 progress_bar.progress(progress)
-                status_text.text(f"🌐 正在爬取网页: {url}")
+                status_text.text(f"🌐 Scraping webpage: {url}")
 
                 try:
                     # 伪装成浏览器，防止 403 错误
@@ -83,8 +179,26 @@ def build_knowledge_base(
                     }
                     loader = WebBaseLoader(url, header_template=headers)
                     docs = loader.load()
+
+                    # 确保 docs 是列表且所有元素都有 page_content 属性
+                    if not isinstance(docs, list):
+                        docs = [docs] if docs else []
+
+                    # 过滤并记录问题文档
+                    valid_docs = []
+                    for i, d in enumerate(docs):
+                        if hasattr(d, "page_content"):
+                            valid_docs.append(d)
+                        else:
+                            st.warning(f"⚠️ 网页 {url} 的第 {i} 个文档不是标准格式（类型: {type(d)}），已跳过")
+
+                    docs = valid_docs
+                    if not docs:
+                        st.warning(f"⚠️ 网页 {url} 没有提取到有效文档")
+                        continue
+
                     all_documents.extend(docs)
-                    
+
                     file_stats.append({
                         "name": url,
                         "type": "🌐 网页",
@@ -101,12 +215,49 @@ def build_knowledge_base(
             st.error("❌ 未提取到有效文本")
             return
 
-        status_text.text("✂️ 正在切分文档...")
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+        # 最后一次检查：确保所有文档都是有效的
+        status_text.text("🔍 Validating documents...")
+        valid_all_documents = []
+        for i, doc in enumerate(all_documents):
+            if hasattr(doc, "page_content"):
+                valid_all_documents.append(doc)
+            else:
+                st.warning(f"⚠️ 检测到第 {i} 个文档格式异常（类型: {type(doc)}），已跳过")
+
+        if not valid_all_documents:
+            progress_bar.empty()
+            status_text.empty()
+            st.error("❌ 所有文档都不是有效格式")
+            return
+
+        all_documents = valid_all_documents
+
+        status_text.text("✂️ Splitting documents...")
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=chunk_size,
+            chunk_overlap=chunk_overlap
+        )
         split_docs = text_splitter.split_documents(all_documents)
 
-        status_text.text("🔢 正在生成向量索引...")
-        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+        # 验证切分后的文档
+        status_text.text("🔍 Validating chunks...")
+        valid_split_docs = []
+        for i, doc in enumerate(split_docs):
+            if hasattr(doc, "page_content"):
+                valid_split_docs.append(doc)
+            else:
+                st.warning(f"⚠️ 切分后第 {i} 个文档格式异常（类型: {type(doc)}），已跳过")
+
+        if not valid_split_docs:
+            progress_bar.empty()
+            status_text.empty()
+            st.error("❌ 切分后没有有效文档")
+            return
+
+        split_docs = valid_split_docs
+
+        status_text.text("🔢 Generating vector index (first run may download model, please wait)...")
+        embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
         vectorstore = FAISS.from_documents(split_docs, embeddings)
 
         st.session_state["vectorstore"] = vectorstore
@@ -119,4 +270,5 @@ def build_knowledge_base(
     except Exception as e:
         progress_bar.empty()
         status_text.empty()
-        st.error(f"构建过程发生未知错误: {e}")# Update test
+        st.error(f"❌ 构建过程发生错误: {e}")
+        st.exception(e)  # 显示完整错误堆栈，便于调试

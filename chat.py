@@ -1,13 +1,19 @@
 import streamlit as st
 
-import os
-import csv
-import datetime
-
-# 你的原始 import（未改）
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 from langchain_core.prompts import ChatPromptTemplate
+
+from config import (
+    DEEPSEEK_MODEL,
+    DEEPSEEK_BASE_URL,
+    DEFAULT_RETRIEVAL_K,
+    SYSTEM_PROMPT_CHAT,
+    SYSTEM_PROMPT_HOUSING,
+    USE_RERANK,
+    RERANK_TOP_K,
+)
+from utils import log_feedback, get_unique_button_key, init_session_state
 
 # 原本直接从 langchain.chains import create_retrieval_chain 会在部分版本中报错
 # 我们用兼容 shim：若原函数存在就用原函数，否则定义一个与原用法兼容的实现
@@ -41,17 +47,24 @@ except Exception:
 
             def _get_documents(self, query):
                 # Common getter names across vectorstores/retrievers
+                raw_docs = []
                 if hasattr(self.retriever, "get_relevant_documents"):
-                    return self.retriever.get_relevant_documents(query)
-                if hasattr(self.retriever, "get_relevant_source_documents"):
-                    return self.retriever.get_relevant_source_documents(query)
-                # some retrievers are callable
-                try:
-                    maybe = self.retriever(query)
-                    # if returns list-like assume docs
-                    return maybe
-                except Exception:
-                    return []
+                    raw_docs = self.retriever.get_relevant_documents(query)
+                elif hasattr(self.retriever, "get_relevant_source_documents"):
+                    raw_docs = self.retriever.get_relevant_source_documents(query)
+                else:
+                    # some retrievers are callable
+                    try:
+                        raw_docs = self.retriever(query)
+                    except Exception:
+                        raw_docs = []
+
+                # 确保返回的是列表
+                if not isinstance(raw_docs, list):
+                    raw_docs = [raw_docs] if raw_docs else []
+
+                # 过滤掉非 Document 对象，只保留有 page_content 属性的对象
+                return [d for d in raw_docs if hasattr(d, "page_content")]
 
             def _call_doc_chain(self, docs, query):
                 inputs = {"input_documents": docs, "input": query}
@@ -79,7 +92,9 @@ except Exception:
                         pass
                 # fallback: return joined docs text
                 try:
-                    joined = "\n\n".join(getattr(d, "page_content", str(d)) for d in docs)
+                    # 确保 docs 都有 page_content 属性
+                    valid_docs = [d for d in docs if hasattr(d, "page_content")]
+                    joined = "\n\n".join(d.page_content for d in valid_docs)
                     return {"output_text": joined}
                 except Exception:
                     return {"output_text": ""}
@@ -105,6 +120,10 @@ except Exception:
                 # expects inputs like {"input": "user question"}
                 query = inputs.get("input") or inputs.get("query") or ""
                 docs = self._get_documents(query) or []
+
+                # 再次确保所有 docs 都有 page_content（防御性编程）
+                docs = [d for d in docs if hasattr(d, "page_content")]
+
                 result = self._call_doc_chain(docs, query)
                 text = self._normalize_to_text(result)
                 return {"answer": text, "source_documents": docs}
@@ -114,62 +133,72 @@ except Exception:
 # 你的原有 import（你之前文件里也有这行）
 from langchain.chains.combine_documents import create_stuff_documents_chain
 
-def _log_feedback(label, interaction):
+
+def rerank_documents(query: str, documents: list, top_k: int = 3):
     """
-    简单把用户对最新回答的反馈写到本地 CSV：
-    - label: "up" / "down"
-    - interaction: 最近一次问答的信息（问题 / 回答 / 是否用了 RAG / 来源）
+    使用 FlashRank 对检索到的文档进行重排序
+
+    Args:
+        query: 用户查询
+        documents: 检索到的文档列表
+        top_k: 保留前 k 个文档
+
+    Returns:
+        重排序后的文档列表
     """
-    if not interaction:
-        return
+    # 确保 documents 是列表
+    if not isinstance(documents, list):
+        documents = [documents] if documents else []
+
+    # 过滤掉没有 page_content 的条目，避免后续 AttributeError
+    clean_docs = [d for d in documents if hasattr(d, "page_content") and hasattr(d, "metadata")]
+    if not clean_docs:
+        return []
 
     try:
-        row = {
-            "timestamp": datetime.datetime.utcnow().isoformat(),
-            "label": label,
-            "question": interaction.get("question", ""),
-            "answer": interaction.get("answer", "")[:200],  # 截断一下避免太长
-            "used_rag": interaction.get("used_rag", False),
-            "sources": "|".join(interaction.get("sources") or []),
-        }
+        from flashrank import Ranker, RerankRequest
 
-        file_exists = os.path.exists("feedback_log.csv")
-        fieldnames = list(row.keys())
+        ranker = Ranker(model_name="ms-marco-MiniLM-L-12-v2", cache_dir="/tmp")
 
-        with open("feedback_log.csv", "a", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            if not file_exists:
-                writer.writeheader()
-            writer.writerow(row)
-    except Exception:
-        # demo 阶段，可以不打扰用户，静默失败即可
-        pass
+        passages = []
+        for i, doc in enumerate(clean_docs):
+            passages.append(
+                {
+                    "id": i,
+                    "text": getattr(doc, "page_content", ""),
+                    "meta": getattr(doc, "metadata", {}),
+                }
+            )
 
+        rerank_request = RerankRequest(query=query, passages=passages)
+        results = ranker.rerank(rerank_request)
+
+        reranked_docs = []
+        for result in results[:top_k]:
+            doc_id = result["id"]
+            if 0 <= doc_id < len(clean_docs):
+                reranked_docs.append(clean_docs[doc_id])
+
+        return reranked_docs
+    except Exception as e:
+        # 如果 rerank 失败，返回原始文档
+        st.warning(f"⚠️ Rerank 失败，使用原始检索结果: {e}")
+        return clean_docs[:top_k]
 
 
 def run_chat(deepseek_api_key: str) -> None:
     # 1. 初始化会话 & 最近一次交互
-    if "messages" not in st.session_state:
-        st.session_state["messages"] = [
-            {
-                "role": "assistant",
-                "content": "你好！我是 NTU Campus Genie。"
-                           "建议你先上传/构建宿舍 & STP 相关文档，然后可以直接问我问题，"
-                           "或者点击上面的示例问题快速开始～",
-            }
-        ]
-    if "last_interaction" not in st.session_state:
-        st.session_state["last_interaction"] = None
+    init_session_state()
 
     # 2. 展示历史消息
     for msg in st.session_state.messages:
         st.chat_message(msg["role"]).write(msg["content"])
 
-    # 3. 支持“预填问题”（从快速开始按钮来）+ 手动输入
-    user_input = st.chat_input("请输入问题...")
+    # 3. Support "prefilled questions" (from quick start buttons) + manual input
+    user_input = st.chat_input("Type your question here...")
     prompt = None
 
-    # 如果上一步点击了“快速开始”按钮，就优先用 prefill
+    # If "quick start" button was clicked, use prefill first
     prefill = st.session_state.get("prefill")
     if prefill:
         prompt = prefill
@@ -177,13 +206,13 @@ def run_chat(deepseek_api_key: str) -> None:
     elif user_input:
         prompt = user_input
 
-    # 没有任何输入就直接返回
+    # Return if no input
     if not prompt:
         return
 
-    # 4. 没有 API Key 就提示并中断
+    # 4. Prompt and stop if no API Key
     if not deepseek_api_key:
-        st.info("请先在左侧设置 DeepSeek API Key。")
+        st.info("Please enter your DeepSeek API Key in the sidebar first.")
         st.stop()
 
     # 5. 把本轮用户消息加入历史并展示
@@ -193,9 +222,9 @@ def run_chat(deepseek_api_key: str) -> None:
     try:
         # 初始化 LLM
         llm = ChatOpenAI(
-            model="deepseek-chat",
+            model=DEEPSEEK_MODEL,
             openai_api_key=deepseek_api_key,
-            base_url="https://api.deepseek.com/v1",
+            base_url=DEEPSEEK_BASE_URL,
         )
 
         used_rag = False
@@ -204,32 +233,47 @@ def run_chat(deepseek_api_key: str) -> None:
         # 6. 如果已经有向量知识库 → 使用 RAG
         if "vectorstore" in st.session_state:
             vectorstore = st.session_state["vectorstore"]
-            retriever = vectorstore.as_retriever(search_kwargs={"k": 6})
-
-            prompt_tmpl = ChatPromptTemplate.from_template(
-                """
-                你是一个热心、专业的 NTU 校园助手。
-                请基于以下【背景信息】回答用户的【问题】。
-                如果不知道，请直接说“文档中未提及”。
-
-                【背景信息】：
-                {context}
-
-                【问题】：
-                {input}
-                """
-            )
-
-            doc_chain = create_stuff_documents_chain(llm, prompt_tmpl)
-            rag_chain = create_retrieval_chain(retriever, doc_chain)
 
             with st.chat_message("assistant"):
-                st.caption("🔍 正在检索知识库...")
-                response = rag_chain.invoke({"input": prompt})
-                answer = response["answer"]
+                st.caption("🔍 Searching knowledge base...")
 
-                # 从我们刚才在 SimpleRAG 里加的 source_documents 里整理来源
-                docs = response.get("source_documents") or []
+                # Retrieve documents first
+                retriever = vectorstore.as_retriever(search_kwargs={"k": DEFAULT_RETRIEVAL_K})
+                raw_docs = retriever.get_relevant_documents(prompt)
+
+                # Ensure return value is a list
+                if not isinstance(raw_docs, list):
+                    raw_docs = [raw_docs] if raw_docs else []
+
+                # Filter out non-Document objects to avoid missing attributes
+                retrieved_docs = [
+                    d for d in raw_docs if hasattr(d, "page_content") and hasattr(d, "metadata")
+                ]
+
+                # If rerank is enabled, reorder the retrieved documents
+                if USE_RERANK and len(retrieved_docs) > 0:
+                    st.caption("🎯 Optimizing results (Rerank)...")
+                    docs = rerank_documents(prompt, retrieved_docs, top_k=RERANK_TOP_K)
+                else:
+                    docs = retrieved_docs[:RERANK_TOP_K]
+
+                # 最终再防御一次：只保留具备 page_content 的文档
+                docs = [d for d in docs if hasattr(d, "page_content")]
+
+                # 使用 rerank 后的文档生成答案
+                prompt_tmpl = ChatPromptTemplate.from_template(SYSTEM_PROMPT_CHAT)
+                doc_chain = create_stuff_documents_chain(llm, prompt_tmpl)
+
+                # ✅ 修复：doc_chain 期望的是 Document 对象列表，而不是字符串
+                # 正确的调用方式是传递 Document 对象列表
+                result = doc_chain.invoke({"context": docs, "input": prompt})
+
+                if isinstance(result, dict):
+                    answer = result.get("output_text") or result.get("answer") or str(result)
+                else:
+                    answer = str(result)
+
+                # 整理来源（防御：确保有 metadata）
                 seen = set()
                 for d in docs:
                     src = None
@@ -247,23 +291,23 @@ def run_chat(deepseek_api_key: str) -> None:
                 st.write(answer)
 
                 if source_names:
-                    with st.expander("📎 参考来源 / Sources", expanded=False):
+                    with st.expander("📎 Reference Sources", expanded=False):
                         for name in source_names:
                             st.caption(f"- {name}")
 
             used_rag = True
 
-        # 7. 如果还没有知识库，就退化为普通聊天
+        # 7. If no knowledge base, fallback to general chat
         else:
             with st.chat_message("assistant"):
                 response = llm.invoke([HumanMessage(content=prompt)])
                 answer = response.content
                 st.write(answer)
 
-        # 8. 把助手回答写入历史
+        # 8. Add assistant response to history
         st.session_state.messages.append({"role": "assistant", "content": answer})
 
-        # 记录最近一次交互，方便写 feedback
+        # Record last interaction for feedback
         st.session_state["last_interaction"] = {
             "question": prompt,
             "answer": answer,
@@ -271,82 +315,97 @@ def run_chat(deepseek_api_key: str) -> None:
             "sources": source_names,
         }
 
-        # 9. 反馈按钮（只针对最新一轮回答）
+        # 9. Feedback buttons (only for the latest response)
         fb_col1, fb_col2 = st.columns(2)
         with fb_col1:
-            if st.button("👍 有帮助", key=f"fb_up_{len(st.session_state.messages)}"):
-                _log_feedback("up", st.session_state["last_interaction"])
-                st.toast("感谢你的反馈！", icon="👍")
+            if st.button("👍 Helpful", key=get_unique_button_key("fb_up")):
+                if log_feedback("up", st.session_state["last_interaction"]):
+                    st.toast("Thank you for your feedback!", icon="👍")
         with fb_col2:
-            if st.button("👎 没帮助", key=f"fb_down_{len(st.session_state.messages)}"):
-                _log_feedback("down", st.session_state["last_interaction"])
-                st.toast("已记录你的反馈～", icon="👎")
+            if st.button("👎 Not Helpful", key=get_unique_button_key("fb_down")):
+                if log_feedback("down", st.session_state["last_interaction"]):
+                    st.toast("Feedback recorded!", icon="👎")
 
     except Exception as e:
-        st.error(f"发生错误: {e}")
+        import traceback
+        error_details = traceback.format_exc()
+        st.error(f"Error occurred: {e}")
+        with st.expander("🐛 View Detailed Error (Debug)"):
+            st.code(error_details)
 
 
 def generate_housing_plan(preferences: dict, deepseek_api_key: str) -> str:
     """
-    根据用户的偏好 + 当前向量知识库，生成宿舍推荐与申请计划。
-    preferences 示例：
+    Generate housing recommendations based on user preferences and knowledge base.
+    preferences example:
     {
-        "budget": "尽量省钱",
-        "privacy": "非常在意",
-        "stay_term": "整学年（2 学期）",
+        "budget": "Budget-friendly",
+        "privacy": "Very important",
+        "stay_term": "Full academic year (2 semesters)",
     }
     """
     if "vectorstore" not in st.session_state:
-        return "当前还没有宿舍相关知识库，请先上传文档或输入 NTU 官网链接并点击构建知识库。"
+        return "No housing knowledge base found. Please upload documents or enter NTU webpage URLs to build the knowledge base first."
 
     if not deepseek_api_key:
-        return "DeepSeek API Key 未设置，请先在左侧设置。"
+        return "DeepSeek API Key not set. Please enter it in the sidebar first."
 
     # 初始化 LLM
     llm = ChatOpenAI(
-        model="deepseek-chat",
+        model=DEEPSEEK_MODEL,
         openai_api_key=deepseek_api_key,
-        base_url="https://api.deepseek.com/v1",
+        base_url=DEEPSEEK_BASE_URL,
     )
 
     vectorstore = st.session_state["vectorstore"]
-    retriever = vectorstore.as_retriever(search_kwargs={"k": 6})
+    retriever = vectorstore.as_retriever(search_kwargs={"k": DEFAULT_RETRIEVAL_K})
 
-    # 把偏好转成一段自然语言描述
+    # 把偏好转成一段自然语言描述，作为检索查询
     pref_text = (
         f"预算倾向：{preferences.get('budget')}\n"
         f"隐私 / 独立卫生间：{preferences.get('privacy')}\n"
         f"预计入住时长：{preferences.get('stay_term')}\n"
     )
 
-    prompt_tmpl = ChatPromptTemplate.from_template(
-        """
-        你是一个熟悉 NTU 研究生宿舍的助手。
-        下面是一位同学的住宿偏好，请结合【背景信息】给出建议。
+    # 使用带偏好信息的 prompt 模板 - 注意：SYSTEM_PROMPT_HOUSING 需要 preferences, context, input 三个参数
+    # 但 create_stuff_documents_chain 只支持 context 和 input，所以我们需要手动处理
 
-        要求输出结构：
-        1. 用 2-3 句话总结 TA 的需求特点。
-        2. 推荐 1-2 个具体宿舍选择（比如 Graduate Hall 1 双人间 / North Hill 单人间），
-           解释为什么适合（结合价格、房型、是否独立卫浴等）。
-        3. 给出一个清晰的申请 checklist（用条目列出），包括：
-           - 何时在系统里提交申请
-           - 需要支付的费用（如果文档中有）
-           - 注意查看宿舍结果的时间节点
-        如果文档中没有提到某些细节，请明确写“文档中未提及”。
+    # Solution: Embed preferences into input, use simplified prompt
+    simplified_prompt = """
+You are an expert assistant familiar with NTU graduate housing.
+Below are a student's housing preferences. Please provide recommendations based on the [Context Information].
 
-        【学生的偏好】：
-        {preferences}
+Required output structure (respond in both English and Chinese):
+1. Summarize their needs in 2-3 sentences (both in English and Chinese)
+2. Recommend 1-2 specific housing options (e.g., Graduate Hall 1 twin sharing / North Hill single room),
+   explaining why they are suitable (considering price, room type, private bathroom, etc.)
+3. Provide a clear application checklist with bullet points, including:
+   - When to submit the application in the system
+   - Fees to pay (if mentioned in documents)
+   - Important dates to check for housing results
+If certain details are not mentioned in the documents, please clearly state "Not mentioned in the documents".
 
-        【背景信息】：
-        {context}
-        """
-    )
+Please respond in both English and Chinese (中英双语回答).
 
-    doc_chain = create_stuff_documents_chain(llm, prompt_tmpl)
-    rag_chain = create_retrieval_chain(retriever, doc_chain)
+[Context Information]:
+{context}
 
-    # 把“偏好”作为 input 送进 RAG
-    result = rag_chain.invoke({"input": "", "preferences": pref_text})
-    answer = result.get("answer") or "生成失败，请稍后重试。"
+[Question]:
+{input}
+"""
 
-    return answer
+    try:
+        prompt_tmpl = ChatPromptTemplate.from_template(simplified_prompt)
+        doc_chain = create_stuff_documents_chain(llm, prompt_tmpl)
+        rag_chain = create_retrieval_chain(retriever, doc_chain)
+
+        # Pass preferences as input
+        query = f"Based on the following preferences, recommend suitable housing:\n{pref_text}\nPlease provide a detailed housing recommendation plan."
+        result = rag_chain.invoke({"input": query})
+        answer = result.get("answer") or "Failed to generate recommendations. Please try again."
+
+        return answer
+    except Exception as e:
+        import traceback
+        error_msg = f"Error generating housing recommendations: {e}\n\nDetails:\n{traceback.format_exc()}"
+        return error_msg
