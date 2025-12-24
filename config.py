@@ -42,6 +42,8 @@ EXAMPLE_QUESTIONS = [
     "How do I apply for graduate housing? What are the detailed steps?",
     "How do I get from NTU to Orchard? How much for MRT and taxi?",
     "What documents do I need to apply for Student's Pass?",
+    "How do I get from Graduate Hall to Lee Wee Nam Library?",
+    "What is NTU's grading system and GPA calculation?",
 ]
 
 # Default Knowledge Base File Paths
@@ -59,11 +61,7 @@ DEFAULT_URLS = [
 ]
 
 # UI Text
-WELCOME_MESSAGE = """Hello! I'm NTU Campus Genie.
-
-Upload documents or build the knowledge base to get started, then ask me questions or click the example questions below!
-
-💡 Tip: If you haven't set up a knowledge base yet, click the "Load Default Knowledge Base" button in the sidebar to get started quickly!"""
+WELCOME_MESSAGE = ""  # No welcome message - UI is self-explanatory
 
 # System Prompts (Bilingual: English instruction, Chinese & English output)
 SYSTEM_PROMPT_CHAT = """
